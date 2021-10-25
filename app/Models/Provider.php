@@ -9,7 +9,7 @@ class Provider extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['username'];
+    protected $fillable = ['username','user_id'];
 
     public function user(){
         return $this->belongsTo(User::class);
