@@ -18,6 +18,12 @@
                         </div>
                     @endif
 
+                    @if (Session::has("error"))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                        </div>
+                    @endif
+
                     <a href="{{ route("providers.create") }}" class="btn btn-success">Add new Provider</a>
                     <h1>All Providers</h1>
                     <table class="table">

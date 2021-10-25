@@ -30,13 +30,18 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 // redirect route after Login
 Route::get('redirect', [RedirectController::class,'redirectUser']);
 
-Route::get('providers', [ProviderController::class,'index'])->name("providers");
-Route::view("/providers/create",'providers.create')->name("providers.create");
-Route::post('providers', [ProviderController::class,'store'])->name("providers.store");
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('providers', [ProviderController::class,'index'])->name("providers");
+    Route::view("/providers/create",'providers.create')->name("providers.create");
+    Route::post('providers', [ProviderController::class,'store'])->name("providers.store");
+});
 
-Route::get("locations/{provider}",[LocationController::class,'index'])->name("locations");
-Route::get("/locations/create/{provider}",[LocationController::class,'create'])->name("locations.create");
-// Route::view("/locations",'locations.create')->name("locations.create");
-Route::post("locations",[LocationController::class,'store'])->name("locations.store");
+Route::middleware(['auth', 'provider'])->group(function () {
+    Route::get("locations/{provider}",[LocationController::class,'index'])->name("locations");
+    Route::get("/locations/create/{provider}",[LocationController::class,'create'])->name("locations.create");
+    // Route::view("/locations",'locations.create')->name("locations.create");
+    Route::post("locations",[LocationController::class,'store'])->name("locations.store");
+});
+
 
 

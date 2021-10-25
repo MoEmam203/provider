@@ -18,6 +18,12 @@
                         </div>
                     @endif
 
+                    @if (Session::has("error"))
+                        <div class="alert alert-danger">
+                            {{ session()->get('error') }}
+                        </div>
+                    @endif
+
                     @if (count($errors)>0)
                         <div class="alert alert-danger">
                             <ul>
