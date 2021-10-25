@@ -34,4 +34,15 @@ class LocationController extends Controller
 
         return redirect()->route("locations",Auth::user()->provider)->with("success","Location added successfully");
     }
+
+    public function domain($username){
+        $provider = Provider::where("username",$username)->first();
+        if(!$provider){
+            return redirect()->route("root")->with("error","Invalid Username");
+        }
+
+        $locations = Location::where("provider_id",$provider->id)->get();
+
+        return view("domain.index",['user'=>$provider->user,'locations'=>$locations]);
+    }
 }

@@ -21,11 +21,13 @@ define("PAGINATE_NUMBER",5);
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('root');
 
-Auth::routes();
+Auth::routes([
+    'register' => false,
+]);
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 // redirect route after Login
 Route::get('redirect', [RedirectController::class,'redirectUser']);
@@ -42,6 +44,14 @@ Route::middleware(['auth', 'provider'])->group(function () {
     // Route::view("/locations",'locations.create')->name("locations.create");
     Route::post("locations",[LocationController::class,'store'])->name("locations.store");
 });
+
+Route::domain('{username}.nameDomain.com')->group(function () {
+    Route::get('/', [LocationController::class,'domain'])->name("subdomain");
+});
+
+// for testing cuz subdomain doesn't work local 
+Route::get("test/{username}",[LocationController::class,'domain']);
+
 
 
 
