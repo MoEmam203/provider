@@ -47,7 +47,6 @@
                         <button type="submit" class="btn btn-primary mt-3">Add</button>
                     </form>
 
-                    {{-- <a href="{{ route("locations") }}" class="btn btn-danger mt-3">Return to Your Locations</a> --}}
                 </div>
             </div>
         </div>

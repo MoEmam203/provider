@@ -32,7 +32,6 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Latitude</th>
                                 <th scope="col">Longitude</th>
-                                <th scope="col">Operations</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -41,9 +40,6 @@
                                     <th scope="row">{{ $location->id }}</th>
                                     <td>{{ $location->latitude }}</td>
                                     <td>{{ $location->longitude}}</td>
-                                    <td>
-                                        <a href="" class="btn btn-primary">View</a>
-                                    </td>
                                 </tr>
                             @empty
                                 <p>No Locations Yet , Add New One</p>

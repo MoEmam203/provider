@@ -33,7 +33,6 @@
                                 <th scope="col">Name</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Username</th>
-                                <th scope="col">Operations</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -42,16 +41,11 @@
                                     <th scope="row" class="text-danger">{{ $provider->id }}</th>
                                     <td>{{ $provider->user->name }}</td>
                                     <td>{{ $provider->user->email }}</td>
-                                    <td>{{ $provider->username}}</td>
-                                    <td>
-                                        <a href="" class="btn btn-primary">View</a>
-                                    </td>
+                                    <td>{{ $provider->username}}</td>>
                                 </tr>
                             @empty
                                 <p>No Providers Yet , Add New One</p>
                             @endforelse
-                            
-                            
                         </tbody>
                     </table>
 
