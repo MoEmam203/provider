@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\RedirectController;
 use App\Models\Provider;
@@ -33,6 +34,9 @@ Route::get('providers', [ProviderController::class,'index'])->name("providers");
 Route::view("/providers/create",'providers.create')->name("providers.create");
 Route::post('providers', [ProviderController::class,'store'])->name("providers.store");
 
-Route::get("locations/{provider}",function(Provider $provider){
-    return "hi provider";
-})->name("locations");
+Route::get("locations/{provider}",[LocationController::class,'index'])->name("locations");
+Route::get("/locations/create/{provider}",[LocationController::class,'create'])->name("locations.create");
+// Route::view("/locations",'locations.create')->name("locations.create");
+Route::post("locations",[LocationController::class,'store'])->name("locations.store");
+
+
