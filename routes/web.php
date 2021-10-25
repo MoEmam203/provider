@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\ProviderController;
+use App\Http\Controllers\RedirectController;
+use App\Models\Provider;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+define("PAGINATE_NUMBER",5);
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -20,3 +25,14 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// redirect route after Login
+Route::get('redirect', [RedirectController::class,'redirectUser']);
+
+Route::get('providers', [ProviderController::class,'index'])->name("providers");
+Route::view("/providers/create",'providers.create')->name("providers.create");
+Route::post('providers', [ProviderController::class,'store'])->name("providers.store");
+
+Route::get("locations/{provider}",function(Provider $provider){
+    return "hi provider";
+})->name("locations");
