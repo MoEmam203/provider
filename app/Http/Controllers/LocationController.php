@@ -3,46 +3,30 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\LocationRequest;
-use App\Models\Location;
-use App\Models\Provider;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class LocationController extends Controller
 {
-    public function index(Provider $provider){
-        $locations = Location::where('provider_id',$provider->id)->paginate(PAGINATE_NUMBER);
-
-        return view("locations.index",compact('locations'));
+    public function index()
+    {
+        $provider = auth()->user()->provider;
+        $locations = $provider->locations()->get();
+        return view('locations.index', compact('locations', 'provider'));
     }
 
-    public function create(Provider $provider){
-        $locations = Location::where('provider_id',$provider->id)->get();
-
-        // return count($locations);
-        if(count($locations) >= 5){
-            return redirect()->back()->with("error","You have 5 locations , you can't add more");
+    public function create()
+    {
+        $provider = auth()->user()->provider;
+        $locations_count = $provider->locations()->count();
+        if ($locations_count >= 5) {
+            return redirect()->back()->with('error', "You have 5 locations , you can't add more");
         }
-        return view("locations.create");
+        return view('locations.create');
     }
 
-    public function store(LocationRequest $request , Location $location){
-        $location->latitude = $request->latitude;
-        $location->longitude = $request->longitude;
-        $location->provider_id = Auth::user()->provider->id;
-        $location->save();
-
-        return redirect()->route("locations",Auth::user()->provider)->with("success","Location added successfully");
-    }
-
-    public function domain($username){
-        $provider = Provider::where("username",$username)->first();
-        if(!$provider){
-            return redirect()->route("root")->with("error","Invalid Username");
-        }
-
-        $locations = Location::where("provider_id",$provider->id)->get();
-
-        return view("domain.index",['user'=>$provider->user,'locations'=>$locations]);
+    public function store(LocationRequest $request)
+    {
+        $provider = auth()->user()->provider;
+        $provider->locations()->create($request->validated());
+        return redirect()->route('locations.index')->with('success', 'Location added successfully');
     }
 }

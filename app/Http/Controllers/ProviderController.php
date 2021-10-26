@@ -5,27 +5,26 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProviderRequest;
 use App\Models\Provider;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class ProviderController extends Controller
 {
-    public function index(){
-        $providers = Provider::paginate(PAGINATE_NUMBER);
-
-        return view("providers.index",compact("providers"));
+    public function index()
+    {
+        $providers = Provider::with('user')->paginate();
+        return view('providers.index', compact('providers'));
     }
 
-    public function store(ProviderRequest $request,User $user,Provider $provider){
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->password = Hash::make($request->password);
-        $user->save();
+    public function create()
+    {
+        return view('providers.create');
+    }
 
-        $provider->username = $request->username;
-        $provider->user_id = $user->id;
-        $provider->save();
+    public function store(ProviderRequest $request)
+    {
+        $user = User::create($request->safe()->only(['name', 'email']) + ['password' => Hash::make($request->password)]);
+        $user->provider()->create($request->safe()->only(['username']));
 
-        return redirect()->back()->with("success","Provider added successfully");
+        return redirect()->back()->with('success', 'Provider added successfully');
     }
 }

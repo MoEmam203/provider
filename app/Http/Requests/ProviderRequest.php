@@ -24,10 +24,10 @@ class ProviderRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|min:3|max:255|string',
-            'email' => 'required|min:3|max:255|email',
-            'password' => 'required|min:8|max:255',
-            'username' => 'required|min:3|max:255|unique:providers,username,'.$this->id,
+            'name' => ['required', 'min:3', 'max:255', 'string'],
+            'email' => ['required', 'min:3', 'max:255', 'email'],
+            'password' => ['required', 'min:8', 'max:255', 'confirmed'],
+            'username' => ['required', 'min:3', 'max:255', 'unique:providers,username'],
         ];
     }
 }

@@ -15,12 +15,10 @@ class CreateLocationsTable extends Migration
     {
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
-            $table->string("latitude");
-            $table->string("longitude");
-            $table->unsignedBigInteger("provider_id");
+            $table->string('latitude');
+            $table->string('longitude');
+            $table->foreignId('provider_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
-
-            $table->foreign('provider_id')->references('id')->on('providers')->onDelete('cascade');
         });
     }
 

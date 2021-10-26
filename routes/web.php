@@ -1,11 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LocationController;
 use App\Http\Controllers\ProviderController;
-use App\Http\Controllers\RedirectController;
-use App\Models\Provider;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -17,41 +16,22 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-define("PAGINATE_NUMBER",5);
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('root');
+Route::view('/', 'welcome')->name('root');
 
-Auth::routes([
-    'register' => false,
-]);
+Auth::routes(['register' => false]);
 
-// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::middleware('auth')->group(function () {
+    Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// redirect route after Login
-Route::get('redirect', [RedirectController::class,'redirectUser']);
+    Route::resource('providers', ProviderController::class)->middleware('admin')->only(['index', 'create', 'store']);
 
-Route::middleware(['auth', 'admin'])->group(function () {
-    Route::get('providers', [ProviderController::class,'index'])->name("providers");
-    Route::view("/providers/create",'providers.create')->name("providers.create");
-    Route::post('providers', [ProviderController::class,'store'])->name("providers.store");
+    Route::resource('locations', LocationController::class)->middleware('provider')->only(['index', 'create', 'store']);
 });
 
-Route::middleware(['auth', 'provider'])->group(function () {
-    Route::get("locations/{provider}",[LocationController::class,'index'])->name("locations");
-    Route::get("/locations/create/{provider}",[LocationController::class,'create'])->name("locations.create");
-    // Route::view("/locations",'locations.create')->name("locations.create");
-    Route::post("locations",[LocationController::class,'store'])->name("locations.store");
-});
-
-Route::domain('{username}.nameDomain.com')->group(function () {
-    Route::get('/', [LocationController::class,'domain'])->name("subdomain");
+Route::domain('{username:username}.' . config('app.site_url'))->group(function () {
+    Route::get('/', [HomeController::class, 'domain']);
 });
 
 // for testing cuz subdomain doesn't work local 
-Route::get("test/{username}",[LocationController::class,'domain']);
-
-
-
-
+Route::get('test/{username:username}', [HomeController::class, 'domain']);

@@ -43,7 +43,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function provider(){
+    public function provider()
+    {
         return $this->hasOne(Provider::class);
     }
 }
