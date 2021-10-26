@@ -16,10 +16,7 @@ class Provider
      */
     public function handle(Request $request, Closure $next)
     {
-        $id = $request->user()->is_admin ;
-        if(!$id == 0){
-            return redirect()->back()->with("error","You aren't allowed");
-        }
+        abort_if(auth()->user()->is_admin, 403, "You aren't allowed");
         return $next($request);
     }
 }
