@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
 
     Route::resource('providers', ProviderController::class)->middleware('admin')->only(['index', 'create', 'store']);
 
-    Route::resource('locations', LocationController::class)->middleware('provider');
+    Route::resource('locations', LocationController::class)->middleware('provider')->only(['index', 'create', 'store']);
 });
 
 Route::domain('{username:username}.' . config('app.site_url'))->group(function () {
